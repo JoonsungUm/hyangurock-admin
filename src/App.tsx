@@ -14,7 +14,13 @@ import {
 } from '@pankod/refine-mui'
 
 import routerProvider from '@pankod/refine-react-router-v6'
-import dataProvider from '@pankod/refine-simple-rest'
+import dataProvider from '@pankod/refine-airtable'
+
+import { ProgramList, ProgramShow } from './pages/programs'
+
+const API_TOKEN = process.env.REACT_APP_AIRTABLE_API_TOKEN || ''
+const BASE_ID = process.env.REACT_APP_AIRTABLE_BASE_ID || ''
+const TABLE_ID = process.env.REACT_APP_AIRTABLE_TABLE_ID || ''
 
 function App() {
     return (
@@ -28,7 +34,15 @@ function App() {
                     ReadyPage={ReadyPage}
                     catchAll={<ErrorComponent />}
                     routerProvider={routerProvider}
-                    dataProvider={dataProvider('https://api.fake-rest.refine.dev')}
+                    dataProvider={dataProvider(API_TOKEN, BASE_ID)}
+                    resources={[
+                        {
+                            name: TABLE_ID,
+                            list: ProgramList,
+                            show: ProgramShow,
+                            options: { label: '프로그램', route: 'programs' },
+                        },
+                    ]}
                 />
             </RefineSnackbarProvider>
         </ThemeProvider>
